@@ -134,7 +134,12 @@ The terminals are currently connected to the RHEL machine hosting VSCode, so we 
 
 You will use both terminal windows during the lab, so go ahead and SSH into both windows.
 
-From each terminal, enter: `ssh rhelai` to authenticate to the RHEL AI server. You will not need a password!
+From each terminal, enter the following to authenticate to the RHEL AI server. You will not need a password!
+
+[source,console,role=execute,subs=attributes+]
+----
+ssh rhelai
+----
 
 // double verify if the below will be fixed for 1.3
 Due to a product constraint, you must run all commands as root.
@@ -338,9 +343,7 @@ So, we have our model deployed and we've chatted with it a bit in RHEL AI - awes
 [#api]
 === Setup vLLM API Key
 
-Before we go to our Visual Studio Code environment, we'll need an api key which we will use to access our deployed model. Exit out of the chat if you still have it running by typing `exit`.
-
-NOTE: The following instructions are also in our https://docs.redhat.com/en/documentation/red_hat_enterprise_linux_ai/1.3/html/building_your_rhel_ai_environment/serving_and_chatting#creating_api_key[official documentation]!
+Before we go to our Visual Studio Code environment, we'll need an API key which we will use to access our deployed model. Exit out of the chat if you still have it running by typing `exit`.
 
 1. Create an API key that is held in $VLLM_API_KEY parameter by running the following command in a terminal window:
 
@@ -363,7 +366,7 @@ Please note this api-key string separately as copy/paste within TMUX session wil
 ilab config edit
 ----
 
-4. Add the following params to the `vllm_args` section of the `config.yaml` file with **your api-key**:
+4. Add the following params to the `vllm_args` sub-section of the `serve` section of the `config.yaml` file with **your api-key**:
 [source,console,role=execute,subs=attributes+]
 ----
 serve:
@@ -380,40 +383,55 @@ serve:
     host_port: 0.0.0.0:8000
 ----
 
-6. Get your ip address
+
+6. Verify the RHEL AI server is using API key authentication by running the following command:
+
+NOTE: The model must be running in one of the terminals before executing the following commands.
+
+// [source,console,role=execute,subs=attributes+]
+// ----
+// curl -s -H "Authorization: Bearer 12345" http://<your-ip-address>:8000/v1/models
+// ----
+
+// This should show the following error:
+
+// [source,console]
+// ----
+// {"error":"Unauthorized"}[root@rhelai ~]#
+// ----
 [source,console,role=execute,subs=attributes+]
 ----
-ip -o -4 a
+ilab model chat -m ~/.cache/instructlab/models/granite-7b-redhat-lab --endpoint-url http://0.0.0.0:8000/v1
 ----
 
-Take the `:eth0 inet` value. Example: `192.168.0.11`. Take note of this value for the next step.
-
-7. Verify the RHEL AI server is using API key authentication by running the following command:
-[source,console,role=execute,subs=attributes+]
-----
-curl -s -H "Authorization: Bearer 12345" http://<your-ip-address>:8000/v1/models
-----
-
-This should show the following error:
-
+You should see the following error:
 [source,console]
 ----
-{"error":"Unauthorized"}[root@rhelai ~]#
+Executing chat failed with: Is the server running? Error code: 401 - {'error': 'Unauthorized'}
 ----
 
-8. Verify the API key works properly
+You can also note the auth error in the output of the terminal window serving the model.
 
-Now, ensure it's working as it should with the right curl command:
+7. Verify the API key works properly
+
+// Now, ensure it's working as it should with the right curl command:
+// [source,console,role=execute,subs=attributes+]
+// ----
+// curl -s -H "Authorization: Bearer $VLLM_API_KEY" http://<your-ip-address>:8000/v1/models
+// ----
+
+// You should get output similar to the following:
+
+// [source,console]
+// ----
+// {"object":"list","data":[{"id":"/root/.cache/instructlab/models/granite-7b-redhat-lab","object":"model","created":1733947948,"owned_by":"vllm","root":"/root/.cache/instructlab/models/granite-7b-redhat-lab","parent":null,"max_model_len":4096,"permission":[{"id":"modelperm-17738edd57994607b5025cf8eac1919e","object":"model_permission","created":1733947948,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}[root@rhelai ~]#
+// ----
+
+Now, let's ensure it's working properly with the following command, using our API key:
+
 [source,console,role=execute,subs=attributes+]
 ----
-curl -s -H "Authorization: Bearer $VLLM_API_KEY" http://<your-ip-address>:8000/v1/models
-----
-
-You should get output similar to the following:
-
-[source,console]
-----
-{"object":"list","data":[{"id":"/root/.cache/instructlab/models/granite-7b-redhat-lab","object":"model","created":1733947948,"owned_by":"vllm","root":"/root/.cache/instructlab/models/granite-7b-redhat-lab","parent":null,"max_model_len":4096,"permission":[{"id":"modelperm-17738edd57994607b5025cf8eac1919e","object":"model_permission","created":1733947948,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}[root@rhelai ~]#
+ilab model chat -m ~/.cache/instructlab/models/granite-7b-redhat-lab --endpoint-url http://0.0.0.0:8000/v1 --api-key $VLLM_API_KEY
 ----
 
 Amazing! We have proven authorized access. Now we're ready to get our code extension up and running!
@@ -448,9 +466,13 @@ image::setup.png[width=100%]
 [#setup_asst]
 === Setup our Code Assistant
 
-As of today, this code assistant extension works natively with Ollama and Continue. However, since we will be using a model that is deployed on RHEL AI for inferencing, we don't need Ollama! So let's setup our RHEL AI connection.
+As of today, this code assistant extension works natively with https://ollama.com/[Ollama] and https://www.continue.dev/[Continue]. Ollama is an open source tool to help you get started running LLMs easily on your laptop. Continue is a leading open source AI code assistant that allows you to connect any models and any context to build custom autocomplete and chat experiences in your dev environments.
 
-Continue is installed when you install the Paver extension. Navigate to the Continue extension in the left-hand side navigation bar:
+When we install the Paver code assistant, it will install Continue automatically as a dependency and configure Continue to use the IBM Granite models, served by Ollama under the hood. 
+
+Since we will be using a model that is deployed on RHEL AI for inferencing, we don't need Ollama! So let's setup our RHEL AI connection.
+
+As stated, Continue is installed when you install the Paver extension. Navigate to the Continue extension in the left-hand side navigation bar:
 
 image::continue_tab.png[width=100%]
 
@@ -460,18 +482,33 @@ Click on the **Settings* icon of the Continue extension to open the config.json 
 
 image::settings_icon.png[width=100%]
 
-Now, in the `config.json` file, in the `models` section, add the following:
+Now, in the `config.json` file, delete all file content and copy paste the entirety of the following file into the config.json:
 //fix below with 3.0 model
 
 [source,console,role=execute,subs=attributes+]
 ----
 {
-  "title":RHEL AI Granite 3.0 8B",
-  "provider": "openai",
-  "model": "granite-7b-redhat-lab",
-  "apiBase":"http://<your-ip-address>:8000/v1"
-  "apiKey": "<your-api-key>"
-},
+  "models": [
+    {
+      "title": "RHEL AI Granite 3.0 8B",
+      "provider": "vllm",
+      "maxPromptTokens": 2024,
+      "model": "/root/.cache/instructlab/models/granite-7b-redhat-lab",
+      "apiBase":"http://rhelai:8000/v1",
+      "apiKey": "<your-api-key>"
+    }
+],
+  "completionOptions": {
+  "maxTokens": 1024
+ },
+  "tabAutocompleteModel": {
+    "title": "Codestral",
+    "provider": "mistral",
+    "model": "codestral-latest",
+    "apiKey": "",
+    "maxPromptTokens": 2024
+  }
+}
 ----
 
 Continue will automatically reset and you will see the Granite model from your RHEL AI server as an option in the drop-down as seen below:
@@ -483,17 +520,48 @@ We did it! Now, let's select and use the Granite model on a real project.
 [#code_activity]
 == Using the Code Assistant
 
-// activity to utilize the code assistant and see functionality
+Now, you may have used a code assistant before, and you may have even used Continue! During this lab, we're still gonna give it a whirl so you can get a sense of the end-user experience.
 
-// curl down a code file from github
-// do something with extension
+=== Get code files from GitHub
+
+To get started, I've created a code file for you to work with. 
+
+First, you'll need to clone the repository from GitHub. You can do this either in the Terminal view within VSCode, or switch back over to the *Terminals* tab and in the terminal window that is *NOT* serving our model, type exit until you see `[dev@code ~]` at the prompt line.
+
+To open the terminal view in VSCode navigate to `View` -> `Terminal`, or type the `⌃`` keyboard shortcut.
+
+In the terminal, run the following command to clone the public repo (type in manually as VSCode in this lab will not read your browser clipboard):
+
+[source,console,role=execute,subs=attributes+]
+----
+git clone https://github.com/taylorjordanNC/rhone_code.git
+----
+
+Once cloned, go to `File` -> `Open Folder`, and navigate to the rhone_code folder you just cloned which will be at the following path:
+
+[source,console]
+----
+/home/dev/rhone_code/
+----
+
+Now, from the left-hand side Explorer, open the `redhattriviaapp.java` file.
+
+Take a look at the application. I am sure it's the best you have ever seen.
+
+=== Use the chat function to get code suggestions
+
+Re-open Continue from the left-hand navigation bar.
+
+Go through the application code and use the chat assistant to make suggestions to the code for improvement. 
+
+You are using your own RHEL-AI powered code assistant! 
 
 [#conclusion]
 == Conclusion
 
 Great job! 
 
-Our goal today was to have you familiarize yourself with the RHEL AI environment and the Granite models. We wanted you to see how to utilize this technology in a practical, repeatable way.
+Our goal today was to have you familiarize yourself with the RHEL AI environment and our VS Code Granite code assistant. We wanted you to see how to utilize this technology in a practical, repeatable way.
 
 Code assistant technology is a prominent use case with customers, and we hope the lab today helped you envision how you can work with customers to leverage the Granite LLMs and Red Hat AI for a secure, flexible, reliable code assistant solution.
 
