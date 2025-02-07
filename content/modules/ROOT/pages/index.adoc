@@ -216,9 +216,17 @@ In RHEL AI, you can download and deploy any model for inferencing that vLLM supp
 
 In order to login to the container registry, you need a service account. To save you some time, we will provide you a username and password to use:
 
-**Username**: 11009103|rhone-code
+**Username**:
+[source,console,role=execute,subs=attributes+]
+----
+11009103|rhone-code
+----
 
-**Password Token**: eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJiOGUwYjFkYzJlMWM0MDE4YjUxZDNkODFiMzQyNTI4YSJ9.NTU_z813egTBmmiDUiVWfgC9X8lL4VGCDEPF9FrJo8fk7-qPgKCjeQj59gLakD-rCpTnmiNbiQABDHe5k_MXUmBAS17-h1Z8HtrGJHXXGjbx3DvRRO1O5Ennr4avoO1MLdM_mX5ZXq9sSLNZUpWgtCh8lI6L-6LBT_mWhQdf2TH5i2UCF9_H1-_IL4vnphzXJRxrXeeKP7Bw72S9kzG-PSceYJVkrq7GQr4TJbN_Pcy36Ov7jGQkc5yYTKB-2QZxc5yKfq_mJI8vz1Y62zUIXpd3r7Hgisvl-aHbgdC3d96vnJBHwY483zr6zYLs0t_hK45om59ASevEuT-8DdqGl53Wgh1iaLDwDoX23g6SoZs6jguZG4aL-Trg2zAibta2iwVu0EXqyCLTv3tI6kginuA9JAVzeo0WlarzgEzjDNNMb1nThFFUODQZRnRJ0Jz8RZ3AsrGTpYGh7ojhE__1y4sS6yxM9Zqpul7xqaPsVsYY_D_SWdY_Qv5sp-5nF-PcQV4s6C88LSgcuuJ7QGxtLkgN9B7s6R8mNwo6fEyZ9ecpmR_eEW8p5itKy9uV2zqi0kaM4QnFsHS0wHSnTzV1WKsMynW1efs5e--UHSk6poqarT8afVz0SIVq89cN9VKUxOmzWKLkTlycVBxu_1fDBOHUJT_ofizJq0dPpGOoo40
+**Password Token**:
+[source,console,role=execute,subs=attributes+]
+----
+eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJiOGUwYjFkYzJlMWM0MDE4YjUxZDNkODFiMzQyNTI4YSJ9.NTU_z813egTBmmiDUiVWfgC9X8lL4VGCDEPF9FrJo8fk7-qPgKCjeQj59gLakD-rCpTnmiNbiQABDHe5k_MXUmBAS17-h1Z8HtrGJHXXGjbx3DvRRO1O5Ennr4avoO1MLdM_mX5ZXq9sSLNZUpWgtCh8lI6L-6LBT_mWhQdf2TH5i2UCF9_H1-_IL4vnphzXJRxrXeeKP7Bw72S9kzG-PSceYJVkrq7GQr4TJbN_Pcy36Ov7jGQkc5yYTKB-2QZxc5yKfq_mJI8vz1Y62zUIXpd3r7Hgisvl-aHbgdC3d96vnJBHwY483zr6zYLs0t_hK45om59ASevEuT-8DdqGl53Wgh1iaLDwDoX23g6SoZs6jguZG4aL-Trg2zAibta2iwVu0EXqyCLTv3tI6kginuA9JAVzeo0WlarzgEzjDNNMb1nThFFUODQZRnRJ0Jz8RZ3AsrGTpYGh7ojhE__1y4sS6yxM9Zqpul7xqaPsVsYY_D_SWdY_Qv5sp-5nF-PcQV4s6C88LSgcuuJ7QGxtLkgN9B7s6R8mNwo6fEyZ9ecpmR_eEW8p5itKy9uV2zqi0kaM4QnFsHS0wHSnTzV1WKsMynW1efs5e--UHSk6poqarT8afVz0SIVq89cN9VKUxOmzWKLkTlycVBxu_1fDBOHUJT_ofizJq0dPpGOoo40
+----
 
 NOTE: If you would like to create your own service account, navigate to https://access.redhat.com/terms-based-registry/ and login (SSO) to create a new service account. Follow the steps to create a new account. Once created, you can search for your newly created account by searching for your name in the search bar.
 
