@@ -353,14 +353,16 @@ So, we have our model deployed and we've chatted with it a bit in RHEL AI - awes
 
 Before we go to our Visual Studio Code environment, we'll need an API key which we will use to access our deployed model. Exit out of the chat if you still have it running by typing `exit`.
 
-1. Create an API key that is held in $VLLM_API_KEY parameter by running the following command in a terminal window:
-
+. Create an API key that is held in $VLLM_API_KEY parameter by running the following command in a terminal window:
++
 [source,console,role=execute,subs=attributes+]
 ----
 export VLLM_API_KEY=$(python -c 'import secrets; print(secrets.token_urlsafe())')
 ----
 
-2. View your API key
+. View your API key
++
+
 [source,console,role=execute,subs=attributes+]
 ----
 echo $VLLM_API_KEY
@@ -368,13 +370,17 @@ echo $VLLM_API_KEY
 //look at figuring out a better instruction as it's so easy to do this incorrectly
 Please note this api-key string separately as copy/paste within TMUX session will not work. 
 
-3. Edit the config.yaml 
+. Edit the config.yaml 
++
+
 [source,console,role=execute,subs=attributes+]
 ----
 ilab config edit
 ----
 
-4. Add the following params to the `vllm_args` sub-section of the `serve` section of the `config.yaml` file with **your api-key**:
+. Add the following params to the `vllm_args` sub-section of the `serve` section of the `config.yaml` file with **your api-key**:
++
+
 [source,console,role=execute,subs=attributes+]
 ----
 serve:
@@ -384,7 +390,9 @@ serve:
         - <api-key-string>
 ----
 
-5. Change the default host_port from `127.0.0.1:8000` to `0.0.0.0:8000` in the `config.yaml`:
+. Change the default host_port from `127.0.0.1:8000` to `0.0.0.0:8000` in the `config.yaml`:
++
+
 [source,console,role=execute,subs=attributes+]
 ----
 serve:
@@ -392,50 +400,30 @@ serve:
 ----
 
 
-6. Verify the RHEL AI server is using API key authentication by running the following command:
-
+. Verify the RHEL AI server is using API key authentication by running the following command:
++
 NOTE: The model must be running in one of the terminals before executing the following commands.
-
-// [source,console,role=execute,subs=attributes+]
-// ----
-// curl -s -H "Authorization: Bearer 12345" http://<your-ip-address>:8000/v1/models
-// ----
-
-// This should show the following error:
-
-// [source,console]
-// ----
-// {"error":"Unauthorized"}[root@rhelai ~]#
-// ----
++
 [source,console,role=execute,subs=attributes+]
 ----
 ilab model chat -m ~/.cache/instructlab/models/granite-7b-redhat-lab --endpoint-url http://0.0.0.0:8000/v1
 ----
++
 
-You should see the following error:
+. You should see the following error:
++
 [source,console]
 ----
 Executing chat failed with: Is the server running? Error code: 401 - {'error': 'Unauthorized'}
 ----
-
++
 You can also note the auth error in the output of the terminal window serving the model.
 
-7. Verify the API key works properly
-
-// Now, ensure it's working as it should with the right curl command:
-// [source,console,role=execute,subs=attributes+]
-// ----
-// curl -s -H "Authorization: Bearer $VLLM_API_KEY" http://<your-ip-address>:8000/v1/models
-// ----
-
-// You should get output similar to the following:
-
-// [source,console]
-// ----
-// {"object":"list","data":[{"id":"/root/.cache/instructlab/models/granite-7b-redhat-lab","object":"model","created":1733947948,"owned_by":"vllm","root":"/root/.cache/instructlab/models/granite-7b-redhat-lab","parent":null,"max_model_len":4096,"permission":[{"id":"modelperm-17738edd57994607b5025cf8eac1919e","object":"model_permission","created":1733947948,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}[root@rhelai ~]#
-// ----
+. Verify the API key works properly
++
 
 Now, let's ensure it's working properly with the following command, using our API key:
++
 
 [source,console,role=execute,subs=attributes+]
 ----
