@@ -1,8 +1,8 @@
-== RHEL AI for Emerging Tech Experience (ETX)
+== Building a Code Assistant with Red Hat AI (Red Hat One: Lab09)
 
-This lab provides an in-depth, hands-on experience with RHEL AI and InstructLab, guiding you through the process of understanding, fine-tuning, and improving Large Language Models.
+This lab provides a hands-on experience to set up your own code assistant. First, you'll set up and deploy a model on a RHEL AI system. Then, on a separate RHEL machine, you will connect a VS Code code extension to leverage the model deployed on the RHEL AI machine. This lab will guide you through the process of understanding and leveraging a large language model for development assistance.
 
-This workshop is directed towards technical sales teams with overall familiarity with the command line and basic AI concepts.
+This workshop is directed towards technical development teams with overall familiarity with the command line and basic AI concepts.
 
 == Getting Started
 
