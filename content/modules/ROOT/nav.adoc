@@ -1,5 +1,5 @@
 ** xref:index.adoc#intro[Introduction to the Lab]
-*** xref:index.adoc#rhelai[What is RHEL AI?]
+** xref:index.adoc#rhelai[What is RHEL AI?]
 *** xref:index.adoc#llms[What is a Large Language Model?]
 ** xref:index.adoc#granite_intro[Introducing Granite]
 *** xref:index.adoc#granite_models[Granite Models]
@@ -18,6 +18,7 @@
 ** xref:index.adoc#code_asst[Integrating the Granite Model into a Code Assistant]
 *** xref:index.adoc#api[Setup vLLM API Key]
 *** xref:index.adoc#vscode[Visual Studio Code]
-*** xref:index.adoc#code_asst[Setup Code Assistant Extension]
-
+*** xref:index.adoc#install_asst[Install Code Assistant Extension]
+*** xref:index.adoc#setup_asst[Setup our Code Assistant]
+*** xref:index.adoc#code_activity[Using the Code Assistant]
 ** xref:index.adoc#conclusion[Conclusion]
