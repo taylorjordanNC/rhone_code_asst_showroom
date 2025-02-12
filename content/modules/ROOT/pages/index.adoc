@@ -550,7 +550,7 @@ Now, in the `config.json` file, delete all file content and copy paste the entir
       "maxPromptTokens": 2024,
       "model": "/root/.cache/instructlab/models/granite-3.1-8b-lab-v1",
       "apiBase":"http://rhelai:8000/v1",
-      "apiKey": "lt073DI4lnpp6dR2FMEjMwCNqnLYB_YPI2J94y1_ocI"
+      "apiKey": "<api-key>"
     }
 ],
   "completionOptions": {
@@ -562,7 +562,7 @@ Now, in the `config.json` file, delete all file content and copy paste the entir
     "maxPromptTokens": 2024,
     "model": "/root/.cache/instructlab/models/granite-3.1-8b-lab-v1",
     "apiBase":"http://rhelai:8000/v1",
-    "apiKey": "lt073DI4lnpp6dR2FMEjMwCNqnLYB_YPI2J94y1_ocI"
+    "apiKey": "<api-key>"
   }
 }
 ----
